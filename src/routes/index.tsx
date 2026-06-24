@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Mail, Phone, ArrowUpRight, Sparkles, Brain, Database, Code2, Cpu, GraduationCap, Award, Trophy, Camera, Film, Clapperboard, Menu, X as XClose } from "lucide-react";
+import { Mail, Phone, ArrowUpRight, Sparkles, Brain, Database, Code2, Cpu, GraduationCap, Award, Trophy, Camera, Film, Clapperboard, Menu, X as XClose, FileText, Download } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -252,7 +252,7 @@ const NAV_LINKS = [
   { href: "#contact", label: "Contact" },
 ];
 
-function Nav() {
+function Nav({ onViewResume }: { onViewResume: () => void }) {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -267,12 +267,20 @@ function Nav() {
             <a key={l.href} className="transition hover:text-foreground" href={l.href}>{l.label}</a>
           ))}
         </nav>
-        <button
-          onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground transition hover:bg-neon-glow"
-        >
-          <Menu className="h-3.5 w-3.5" /> Menu
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onViewResume}
+            className="hidden items-center gap-2 rounded-full border border-primary/60 bg-card/40 px-5 py-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary transition hover:bg-primary/10 cursor-pointer sm:inline-flex"
+          >
+            Resume
+          </button>
+          <button
+            onClick={() => setOpen(true)}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground transition hover:bg-neon-glow"
+          >
+            <Menu className="h-3.5 w-3.5" /> Menu
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -344,7 +352,7 @@ function Nav() {
   );
 }
 
-function Hero() {
+function Hero({ onViewResume }: { onViewResume: () => void }) {
   return (
     <section id="top" className="relative overflow-hidden pt-32 pb-24 sm:pt-40">
       <div className="absolute inset-0 grid-bg opacity-50" />
@@ -418,11 +426,18 @@ function Hero() {
             >
               My Projects <ArrowUpRight className="h-4 w-4" />
             </a>
-            <a
-              href="#about"
-              className="inline-flex items-center gap-2 rounded-md border border-primary/60 px-6 py-3 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary transition hover:bg-primary/10"
+            <button
+              onClick={onViewResume}
+              className="inline-flex items-center gap-2 rounded-md border border-primary/60 px-6 py-3 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary transition hover:bg-primary/10 cursor-pointer"
             >
-              About Me
+              View Resume
+            </button>
+            <a
+              href="/vijin_ajai_resume.pdf"
+              download
+              className="inline-flex items-center gap-2 rounded-md border border-border px-6 py-3 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground transition hover:border-primary hover:text-primary"
+            >
+              Download CV
             </a>
           </motion.div>
 
@@ -769,6 +784,38 @@ function ProjectDialog({ project, onClose }: { project: Project | null; onClose:
   );
 }
 
+function ResumeDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-4xl border-border bg-card">
+        <DialogHeader className="flex flex-row items-center justify-between gap-4 pb-2">
+          <div className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-primary" />
+            <div>
+              <DialogTitle className="font-display text-2xl font-bold tracking-tight">Vijin Ajai V — Resume</DialogTitle>
+              <DialogDescription className="text-xs uppercase tracking-[0.25em] text-primary mt-0.5">// curriculum vitae</DialogDescription>
+            </div>
+          </div>
+          <a
+            href="/vijin_ajai_resume.pdf"
+            download
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground transition hover:bg-neon-glow mr-6"
+          >
+            <Download className="h-3.5 w-3.5" /> Download PDF
+          </a>
+        </DialogHeader>
+        <div className="relative w-full overflow-hidden rounded-md border border-border bg-black/20">
+          <iframe
+            src="/vijin_ajai_resume.pdf#toolbar=0"
+            title="Vijin Ajai V - Resume"
+            className="w-full h-[70vh] border-0"
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 const creative = [
   {
     Icon: Camera,
@@ -1013,11 +1060,13 @@ function Footer() {
 }
 
 function Index() {
+  const [resumeOpen, setResumeOpen] = useState(false);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Preloader />
-      <Nav />
-      <Hero />
+      <Nav onViewResume={() => setResumeOpen(true)} />
+      <Hero onViewResume={() => setResumeOpen(true)} />
       <Marquee />
       <About />
       <Skills />
@@ -1027,6 +1076,7 @@ function Index() {
       <Achievements />
       <Contact />
       <Footer />
+      <ResumeDialog open={resumeOpen} onClose={() => setResumeOpen(false)} />
     </main>
   );
 }
