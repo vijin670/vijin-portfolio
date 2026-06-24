@@ -37,7 +37,7 @@ const XSocial = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="M18.244 2H21.5l-7.5 8.57L23 22h-6.937l-5.43-7.106L4.4 22H1.142l8.02-9.166L1 2h7.094l4.91 6.49L18.244 2Zm-2.43 18h1.92L7.27 4H5.21l10.604 16Z"/>
   </svg>
 );
-import portrait from "@/assets/vijin-portrait.asset.json";
+import portrait from "@/assets/vijin-portrait.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -360,7 +360,7 @@ function Hero() {
         >
           <div className="clip-hero relative aspect-[4/5] w-full overflow-hidden bg-card neon-ring">
             <img
-              src={portrait.url}
+              src={portrait}
               alt="Vijin Ajai V"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
             />
